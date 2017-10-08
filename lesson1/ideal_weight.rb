@@ -11,7 +11,7 @@ puts "Как ваше имя?"
 name = gets.chomp
 puts "Укажите ваш рост в см"
 height = gets.chomp
-ideal_weight = (height.to_i - 110)
+ideal_weight = height.to_i - 110
 
 if ideal_weight > 0
   puts "#{name}, ваш идеальный вес #{ideal_weight} кг"
