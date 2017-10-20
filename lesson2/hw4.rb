@@ -1,12 +1,10 @@
 #Заполнить хеш гласными буквами, где значением будет являтся порядковый 
 #номер буквы в алфавите (a - 1).
-vowels = ['a', 'e', 'i', 'o', 'u']
+vowels = %w( a e i o u)
 hash = Hash.new
-i = 1
-('a'..'z').each do |letter|
+('a'..'z').each_with_index do |letter, index|
  if vowels.include?(letter) 
-  hash[letter] = i 
+  hash[letter] = index
  end 
- i += 1
 end
 puts hash 
