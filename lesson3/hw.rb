@@ -1,8 +1,10 @@
 class Station 
 
+  attr_reader :trains
+
   def initialize(name)
     @name = name
-    @trains = []
+    self.trains = []
   end
   
   def arrival(train)
@@ -12,28 +14,33 @@ class Station
   def departure(train)
     @trains.delete(train)
   end
-  def train_list
-    @trains
+
+  def trains_at_type(type)
+    trains.select{|a| a.type = type}
   end
 
 end
 
 class Route
+
+  attr_reader :route
+
   def initialize(from, to)
     @route = [from, to]
   end
 
   def add_station (station)
-    @route.insert(-2,station)  
+    @route.insert(-2, station)  
   end
 
   def delete_station(station)
     @route.delete(station)
   end
 
-  def show_route
+  def print_route
     @route.each{|station| print "#{station} "}
   end
+
   def station(number)
     @route[number]
   end
@@ -41,7 +48,9 @@ class Route
 end
 
 class Train
-  #attr_reader :speed, :quantity_of_wagons
+
+  attr_reader :speed, :quantity_of_wagons, :type
+
   def initialize(number, type, quantity_of_wagons)
     @number = number
     @type = type
@@ -57,15 +66,8 @@ class Train
     @speed = 0
   end
 
-  def curent_speed
-    @speed
-  end
-
-  def wagons
-    @quantity_of_wagons
-  end
   def add_wagon
-    @quantity_of_wagons +=1
+    @quantity_of_wagons += 1 if @speed == 0
   end
 
   def drop_wagon
@@ -75,14 +77,19 @@ class Train
   def add_route(route)
     @route = route
     @curent_station = 0
+    @route[@curent_station].arrival(self)
   end
 
   def forward
+    @route[@curent_station].departure(self)
     @curent_station += 1
+    @route[@curent_station].arrival(self)
   end
 
   def back
+    @route[@curent_station].departure(self)
     @curent_station -= 1
+    @route[@curent_station].arrival(self)
   end
 
   def curent_stations
