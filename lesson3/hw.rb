@@ -4,7 +4,7 @@ class Station
 
   def initialize(name)
     @name = name
-    self.trains = []
+    @trains = []
   end
   
   def arrival(train)
@@ -20,29 +20,29 @@ class Station
   end
 
 end
-
+=
 class Route
 
-  attr_reader :route
+  attr_reader :statons
 
   def initialize(from, to)
-    @route = [from, to]
+    @statons = [from, to]
   end
 
   def add_station (station)
-    @route.insert(-2, station)  
+    @statons.insert(-2, station)  
   end
 
   def delete_station(station)
-    @route.delete(station)
+    @statons.delete(station)
   end
 
   def print_route
-    @route.each{|station| print "#{station} "}
+    @statons.each{|station| print "#{station} "}
   end
 
   def station(number)
-    @route[number]
+    @statons[number]
   end
 
 end
@@ -77,22 +77,22 @@ class Train
   def add_route(route)
     @route = route
     @curent_station = 0
-    @route[@curent_station].arrival(self)
+    curent_station.arrival(self)
   end
 
   def forward
-    @route[@curent_station].departure(self)
+    curent_station.departure(self)
     @curent_station += 1
-    @route[@curent_station].arrival(self)
+    curent_station.arrival(self)
   end
 
   def back
-    @route[@curent_station].departure(self)
+    curent_station.departure(self)
     @curent_station -= 1
-    @route[@curent_station].arrival(self)
+    curent_station.arrival(self)
   end
 
-  def curent_stations
+  def curent_station
     @route.station[curent_station]
   end
 
