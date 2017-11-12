@@ -2,19 +2,20 @@ require_relative 'station'
 require_relative 'train'
 require_relative 'route'
 require_relative 'wagon'
+require_relative 'passenger_wagon'
+require_relative 'cargo_wagon'
+require_relative 'passenger_train'
+require_relative 'cargo_train'
 
+class Controller 
 
-
-
-
-  @all_stations = []
-  @all_trains = []
-  @all_routes = []
-
-
-
-
-  def main_menu
+  def initialize
+    @all_stations = []
+    @all_trains = []
+    @all_routes = []
+  end
+# 2 следующих метода составляют интерфейс класса, обращение к этим методам из вне, необходимое условие работы программы
+  def main_menu 
     puts "Выберите действие"
     puts "1 - Создать станцию"
     puts "2 - Создать поезд"
@@ -65,13 +66,15 @@ require_relative 'wagon'
       trains_on_stations            
   end
  end
-
  
+private #все что ниже будет вызываться только методами данного класса, поскольку наследников нет поместил все в private
+
+attr_accessor :all_stations, :all_trains, :all_routes
 
  def station_create
     puts "Enter station name"
     title = gets.chomp
-    @all_stations << Station.new(title)
+    all_stations << Station.new(title)
     puts "Station was created"
 
  end
@@ -85,22 +88,22 @@ require_relative 'wagon'
     type_of_train = gets.chomp.to_i 
 
     puts "#{ type_of_train == 1 ? CargoTrain.new(number_of_train) : PassengerTrain.new(number_of_train)}"
-    @all_trains << (type_of_train == 1 ? CargoTrain.new(number_of_train) : PassengerTrain.new(number_of_train))
-    puts "#{@all_trains}"
+    all_trains << (type_of_train == 1 ? CargoTrain.new(number_of_train) : PassengerTrain.new(number_of_train))
+    puts "#{all_trains}"
  end
 
 
  def route_create 
     puts "choise first station"
-    @all_stations.each_with_index {|station, index| puts "#{index} - #{station.name}"}
+    all_stations.each_with_index {|station, index| puts "#{index} - #{station.name}"}
     first_station = gets.chomp.to_i
     puts " Начальная станция  - #{@all_stations[first_station].name}"
     puts "choise last station" 
-    @all_stations.each_with_index {|station, index| puts "#{index} - #{station.name}" if index != first_station} 
+    all_stations.each_with_index {|station, index| puts "#{index} - #{station.name}" if index != first_station} 
     last_station = gets.chomp.to_i
-    @all_routes << Route.new(@all_stations[first_station], @all_stations[last_station])
-    puts "Route #{@all_stations[first_station].name} - #{@all_stations[last_station].name} was created"
-    @all_routes.each_with_index{|route, index| puts "#{index} - #{route.name}" }
+    all_routes << Route.new(all_stations[first_station], all_stations[last_station])
+    puts "Route #{all_stations[first_station].name} - #{all_stations[last_station].name} was created"
+    all_routes.each_with_index{|route, index| puts "#{index} - #{route.name}" }
  end
 
 
@@ -112,7 +115,7 @@ require_relative 'wagon'
  end
 
  def display_routes
-   @all_routes.each_with_index{|route, index|puts "#{index} - #{route.name}"}
+   all_routes.each_with_index{|route, index|puts "#{index} - #{route.name}"}
  end
 
  def display_stations(stations = all_stations)
@@ -123,22 +126,22 @@ require_relative 'wagon'
     display_routes
     puts "Введите номер маршрута"
     choisen_route = gets.chomp.to_i    
-    free_station = @all_stations - @all_routes[choisen_route].stations 
+    free_station = all_stations - all_routes[choisen_route].stations 
     display_stations(free_station)
     puts "Выберите номер станции, которую нужно добавить"
     choisen_station = gets.chomp.to_i
-    @all_routes[choisen_route].add_station(@all_stations[choisen_station])
+    all_routes[choisen_route].add_station(all_stations[choisen_station])
  end
 
  def delete_station_from_route
     display_routes
     puts "Введите номер маршрута"
     choisen_route = gets.chomp.to_i
-    display_stations(@all_routes[choisen_route].stations)
+    display_stations(all_routes[choisen_route].stations)
     puts "Выберите номер станции, которую нужно удалить"
     number = gets.chomp.to_i
-    @all_routes[choisen_route].stations.delete_at(number)
-    display_stations(@all_routes[choisen_route].stations)
+    all_routes[choisen_route].stations.delete_at(number)
+    display_stations(all_routes[choisen_route].stations)
  end
 
  def set_route
@@ -148,7 +151,7 @@ require_relative 'wagon'
     puts "Выберите номер маршрута"
     display_routes
     choisen_route = gets.chomp.to_i
-    @all_trains[choisen_train].add_route(@all_routes[choisen_route]) 
+    all_trains[choisen_train].add_route(all_routes[choisen_route]) 
  end
 
  def move_the_train
@@ -157,11 +160,11 @@ require_relative 'wagon'
      choisen_train = gets.chomp.to_i
      puts "Наберите '1' - если хотите двигать поезд по маршруту вперед, '2'- если назад"
      answer = gets.chomp.to_i
-     answer == 1 ? @all_trains[choisen_train].forward : @all_trains[choisen_train].back
+     answer == 1 ? all_trains[choisen_train].forward : all_trains[choisen_train].back
  end
 
  def trains_on_stations
-    @all_stations.each {|station| 
+    all_stations.each {|station| 
       puts " Название станции #{station.name}: " 
       display_trains(station.trains) 
     }
@@ -171,10 +174,10 @@ require_relative 'wagon'
     puts "Выберите номер поезда"
     display_trains
     choisen_train = gets.chomp.to_i
-    if @all_trains[choisen_train].type == "cargo"
-      @all_trains[choisen_train].add_wagon(CargoWagon.new)
+    if all_trains[choisen_train].type == "cargo"
+      all_trains[choisen_train].add_wagon(CargoWagon.new)
     else
-      @all_trains[choisen_train].add_wagon(PassengerWagon.new)
+      all_trains[choisen_train].add_wagon(PassengerWagon.new)
     end
  end
 
@@ -182,12 +185,8 @@ require_relative 'wagon'
   puts "Выберите номер поезда"
   display_trains
   choisen_train = gets.chomp.to_i
-  @all_trains[choisen_train].drop_wagon
+  all_trains[choisen_train].drop_wagon
  end
 
 
-begin 
-  main_menu
-  action = gets.chomp.to_i
-  choise(action) 
-end until action == 0
+end
