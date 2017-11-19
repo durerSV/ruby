@@ -1,5 +1,4 @@
 module InstanceCounter
-  @instances
   def self.included(base)
     base.extend ClassMethods
     base.send :include, InstanceMethods
@@ -7,7 +6,7 @@ module InstanceCounter
 
   module ClassMethods
     def instances
-      @instances
+      @instances = 0
     end
   end
 
