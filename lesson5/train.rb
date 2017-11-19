@@ -1,5 +1,10 @@
 class Train
+  @@trains = {}
   
+  def self.find(number)
+    @@trains[number]
+  end
+
   attr_reader :speed, :wagons, :type, :number
 
   def initialize(number, type)
@@ -7,7 +12,7 @@ class Train
     @type = type
     @wagons = []
     @speed = 0
-  
+    @@trains[number] = self
   end
 
   def speed_up
@@ -58,16 +63,5 @@ class Train
 
 end
 
-class PassengerTrain < Train
 
-  def initialize (number, type = "passenger")
-    super(number, type)
-  end
-end
 
-class CargoTrain < Train
-  
-  def initialize (number, type = "cargo")
-    super(number, type)
-  end
-end
