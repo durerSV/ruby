@@ -8,6 +8,10 @@ module InstanceCounter
     def instances
       @instances = 0
     end
+
+    protected
+    attr_writer :instances
+
   end
 
   module InstanceMethods
