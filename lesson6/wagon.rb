@@ -8,7 +8,7 @@ class Wagon
     validate!
   end
 
-  private
+  protected
 
   def validate!
     raise "укажите название фирмы" if self.name == nil

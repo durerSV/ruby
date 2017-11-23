@@ -83,8 +83,14 @@ attr_accessor :all_stations, :all_trains, :all_routes
 
 
  def train_create
+  begin
     puts "Enter number of train"
     number_of_train = gets.chomp
+    raise "Неверный формат номера" if number_of_train !~ Train::NUMBER_FORMAT
+  rescue RuntimeError => e
+    puts "#{e.message}"
+    retry
+  end
     puts "Enter type of train '1' if 'cargo' or '2' if 'passenger'"
     type_of_train = gets.chomp.to_i 
 

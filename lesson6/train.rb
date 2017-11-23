@@ -69,7 +69,7 @@ class Train
     @route.station(curent_station + 1)
   end
 
-private
+protected
 
   def validate!
     raise "Неверный формат номера" if @number !~ NUMBER_FORMAT
