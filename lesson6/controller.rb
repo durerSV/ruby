@@ -27,14 +27,10 @@ class Controller
     puts "8 - отобразить список поездов и станций"
     puts "0 - выйти"
   end
-
-
-
- def choise(action)
-
-  case action
+  def choise(action)
+    case action
     when 0
-       abort
+      abort
     when 1
       puts "Создавать станции"
       station_create
@@ -52,8 +48,8 @@ class Controller
         delete_station_from_route
       end
     when 4
-     puts "Назначать маршрут поезду"
-     set_route
+      puts "Назначать маршрут поезду"
+      set_route
     when 5
       puts "Добавлять вагоны к поезду"
       add_wagon_to_train
@@ -66,11 +62,11 @@ class Controller
     when 8
       puts "просматривать список станций и список поездов на станции"
       trains_on_stations      
+    end
+    rescue RuntimeError => e
+      puts "e.message: #{e.message}"
+      retry 
   end
-rescue RuntimeError => e
-  puts "e.message: #{e.message}"
-  choise(action) 
- end
  
 private #все что ниже будет вызываться только методами данного класса, поскольку наследников нет поместил все в private
 

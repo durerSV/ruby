@@ -1,6 +1,6 @@
 class Train
   @@trains = {}
-  NUMBER = /^\w{3}-*\w{2}$/i
+  NUMBER_FORMAT = /^\w{3}-*\w{2}$/i
 
   def self.find(number)
     @@trains[number]
@@ -13,12 +13,12 @@ class Train
     @type = type
     @wagons = []
     @speed = 0
-    valid
+    validate!
     @@trains[number] = self
   end
 
   def valid?
-    valid
+    validate!
   rescue
     false
   end
@@ -69,13 +69,14 @@ class Train
     @route.station(curent_station + 1)
   end
 
-end
-
 private
 
-def valid
-    raise "Неверный формат номера" if number !~ NUMBER
-    raise "Выберите тип поезда" if type == nil
+  def validate!
+    raise "Неверный формат номера" if @number !~ NUMBER_FORMAT
+    raise "Выберите тип поезда" if @type == nil
     true
   end
+end
+
+
 

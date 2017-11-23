@@ -5,7 +5,7 @@ class Route
   def initialize(from, to)
     @stations = [from, to]
     @name = "#{from.name}-#{to.name}"
-    valid(from, to)
+    validate!
   end
 
   def add_station (station)
@@ -26,8 +26,10 @@ class Route
   
   private
 
-  def valid(from, to)
-    raise "Выберите существующую станцию" if from == nil || to == nil
+  def validate!
+    raise "Выберите существующую станцию" if @stations[0] == nil || @stations.last == nil
+    raise "Станция должна являтся объектом класса Station" if @stations[0].class != Station|| @stations.last.class != Station
+    raise "Имя не может быть пустым" if @name == nil
   end
 
 end

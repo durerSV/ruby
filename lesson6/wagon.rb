@@ -5,16 +5,13 @@ class Wagon
   def initialize(type = nil, name = nil)
     @type = type
     self.name = name
-    raise
+    validate!
   end
 
   private
 
-  def valid
+  def validate!
     raise "укажите название фирмы" if self.name == nil
   end
 
-end
-
-
-
+end  

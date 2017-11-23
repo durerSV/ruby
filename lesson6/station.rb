@@ -9,7 +9,7 @@ class Station
   def initialize(name)
     @name = name
     @trains = []
-    valid
+    validate!
     @@stations << self
   end
    
@@ -26,7 +26,7 @@ class Station
   end
 
 private
-  def valid 
+  def validate!
     raise "Название станции должно быть длиною не менее 3х сиволов" if name.length < 3
   end
 end
